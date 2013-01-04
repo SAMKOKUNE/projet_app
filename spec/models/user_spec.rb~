@@ -27,6 +27,22 @@ describe User do
   it { should respond_to(:remember_token) }
   it { should respond_to(:authenticate) }
   it { should be_valid }
+  it { should respond_to(:admin) }
+  it { should respond_to(:authenticate) }
+  it { should respond_to(:authors) }
+  it { should respond_to(:feed) }
+
+  it { should be_valid }
+  it { should_not be_admin }
+
+  describe "with admin attribute set to 'true'" do
+    before do
+      @user.save!
+      @user.toggle!(:admin)
+    end
+
+    it { should be_admin }
+  end
 
   describe "when name is not present" do
     before { @user.name = " " }
@@ -102,6 +118,38 @@ describe User do
   describe "remember token" do
     before { @user.save }
     its(:remember_token) { should_not be_blank }
+  end
+  
+   describe "author associations" do
+
+    before { @user.save }
+    let!(:older_author) do 
+      FactoryGirl.create(:author, user: @user)
+    end
+    let!(:newer_author) do
+      FactoryGirl.create(:author, user: @user)
+    end
+
+    it "should have the right authors in the right order" do
+      @user.authors.should == @user.authors.sort
+    end
+    it "should destroy associated authors" do
+      authors = @user.authors.dup
+      @user.destroy
+      authors.should_not be_empty
+      authors.each do |author|
+        Author.find_by_id(author.id).should be_nil
+      end
+    end
+    describe "status" do
+	      let(:unfollowed_post) do
+		FactoryGirl.create(:author, user: FactoryGirl.create(:user))
+	      end
+
+	      its(:feed) { should include(newer_micropost) }
+	      its(:feed) { should include(older_micropost) }
+	      its(:feed) { should_not include(unfollowed_post) }
+    end
   end
 
 end

@@ -132,5 +132,23 @@ describe "User pages" do
 		      specify { user.reload.name.should  == new_name }
 		      specify { user.reload.email.should == new_email }
             end
+	    describe "profile page" do
+		    let(:user) { FactoryGirl.create(:user) }
+		    let!(:a1) { FactoryGirl.create(:author, user: user, nom: "RASAMIZANANY", prenom:"Kune") }
+		    let!(:a2) { FactoryGirl.create(:author, user: user, nom: "Dalle", prenom:"Olivier") }
+
+		    before { visit user_path(user) }
+
+		    it { should have_selector('h1',    text: user.name) }
+		    it { should have_selector('title', text: user.name) }
+
+		    describe "authors" do
+		      it { should have_content(a1.nom) }
+		      it { should have_content(a1.prenom) }
+		      it { should have_content(a2.nom) }
+		      it { should have_content(a2.prenom) }
+		      it { should have_content(user.authors.count) }
+		    end
+         end
     end
 end

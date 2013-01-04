@@ -29,6 +29,8 @@ describe User do
   it { should be_valid }
   it { should respond_to(:admin) }
   it { should respond_to(:authenticate) }
+  it { should respond_to(:authors) }
+  it { should respond_to(:feed) }
 
   it { should be_valid }
   it { should_not be_admin }
@@ -116,6 +118,38 @@ describe User do
   describe "remember token" do
     before { @user.save }
     its(:remember_token) { should_not be_blank }
+  end
+  
+   describe "author associations" do
+
+    before { @user.save }
+    let!(:older_author) do 
+      FactoryGirl.create(:author, user: @user)
+    end
+    let!(:newer_author) do
+      FactoryGirl.create(:author, user: @user)
+    end
+
+    it "should have the right authors in the right order" do
+      @user.authors.should == @user.authors.sort
+    end
+    it "should destroy associated authors" do
+      authors = @user.authors.dup
+      @user.destroy
+      authors.should_not be_empty
+      authors.each do |author|
+        Author.find_by_id(author.id).should be_nil
+      end
+    end
+    describe "status" do
+	      let(:unfollowed_post) do
+		FactoryGirl.create(:author, user: FactoryGirl.create(:user))
+	      end
+
+	      its(:feed) { should include(newer_author) }
+	      its(:feed) { should include(older_author) }
+	      its(:feed) { should_not include(unfollowed_post) }
+    end
   end
 
 end

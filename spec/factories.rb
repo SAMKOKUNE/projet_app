@@ -9,4 +9,10 @@ FactoryGirl.define do
       admin true
     end
   end
+
+  factory :author do
+    nom "RASAMIZANANY"
+    prenom "Kune"
+    user
+  end
 end

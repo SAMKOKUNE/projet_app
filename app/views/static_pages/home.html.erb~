@@ -12,9 +12,8 @@
         <%= render 'shared/user_info' %>
       </section>
       <section>
-        <%= render 'shared/stats' %>
+        <%= render 'shared/author_form' %>
       </section>
-  
     </aside>
   </div>  
 <% else %>
