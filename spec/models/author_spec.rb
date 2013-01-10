@@ -12,7 +12,11 @@ describe Author do
   it { should respond_to(:nom) }
   it { should respond_to(:prenom) }
   it { should respond_to(:user_id) }
-
+  it { should respond_to(:relationships) }
+  it { should respond_to(:publication_authors) }
+  it { should respond_to(:having?) }
+  it { should respond_to(:have!) }
+  it { should respond_to(:unhave!) }
   it { should respond_to(:user) }
   its(:user) { should == user }
   it { should be_valid }
@@ -21,6 +25,7 @@ describe Author do
     before { @author.user_id = nil }
     it { should_not be_valid }
   end
+  
   describe "accessible attributes" do
     it "should not allow access to user_id" do
       expect do
@@ -51,6 +56,23 @@ describe Author do
   describe "with prenom that is too long" do
     before { @author.prenom = "a" * 141 }
     it { should_not be_valid }
+  end
+
+  describe "having" do
+    let(:other_publication) { FactoryGirl.create(:publication) }    
+    before do
+      @author.save
+      @author.have!(other_publication)
+    end
+
+    it { should be_having(other_publication) }
+    its(:publication_authors) { should include(other_publication) }
+    describe "and unhaving" do
+      before { @author.unhave!(other_publication) }
+
+      it { should_not be_having(other_publication) }
+      its(:publication_authors) { should_not include(other_publication) }
+    end
   end
 end
 

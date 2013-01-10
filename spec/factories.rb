@@ -15,4 +15,14 @@ FactoryGirl.define do
     prenom "Kune"
     user
   end
+  factory :publication do
+    titre "titre"
+    typePublication "essai"
+    nom  "nom"
+    annee "2002"
+    mois "janvier"
+    pages "400"
+    notes "Loren Ipsum"
+    resume "resume"
+  end
 end

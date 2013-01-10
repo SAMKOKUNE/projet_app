@@ -1,0 +1,132 @@
+require 'spec_helper'
+
+describe Publication do
+  before do
+    @publication = Publication.new(titre: "titre", typePublication: "typePublication",nom: "nom",annee: "1986",mois: "janvier",pages: "2",notes: "azerty",resume: "resume")
+  end
+
+  subject { @publication }
+
+  it { should respond_to(:titre) }
+  it { should respond_to(:typePublication) }
+  it { should respond_to(:nom) }
+  it { should respond_to(:annee) }
+  it { should respond_to(:mois) }
+  it { should respond_to(:pages) }
+  it { should respond_to(:notes) }
+  it { should respond_to(:resume) }
+  it { should respond_to(:relationships) }
+  it { should respond_to(:authors_publication) }
+  it { should respond_to(:having?) }
+  it { should respond_to(:have!) }
+  it { should respond_to(:unhave!) }
+  
+   it { should be_valid }
+
+   describe "with blank titre" do
+    before { @publication.titre = " " }
+    it { should_not be_valid }
+  end
+
+  describe "with titre that is too long" do
+    before { @publication.titre = "a" * 50 }
+    it { should_not be_valid }
+  end
+  describe "with blank typePublication" do
+    before { @publication.typePublication = " " }
+    it { should_not be_valid }
+  end
+
+  describe "with typePublication that is too long" do
+    before { @publication.typePublication = "a" * 50 }
+    it { should_not be_valid }
+  end
+  describe "with blank nom" do
+    before { @publication.nom = " " }
+    it { should_not be_valid }
+  end
+
+  describe "with nom that is too long" do
+    before { @publication.nom = "a" * 50 }
+    it { should_not be_valid }
+  end
+  describe "with blank annee" do
+    before { @publication.annee = " " }
+    it { should_not be_valid }
+  end
+
+  describe "when  annee is invalid" do
+    it "should be invalid" do
+     year = %w[a123 abcd]
+     year.each do |invalid_year|
+        @publication.annee = invalid_year
+       @publication.should_not be_valid
+     end      
+    end
+  end
+ describe "when annee format is valid" do
+   it "should be valid" do
+     year = %w[2003 1988]
+     year.each do |valid_year|
+      @publication.annee = valid_year
+       @publication.should be_valid
+      end      
+    end
+  end
+  describe "with blank mois" do
+    before { @publication.mois = " " }
+    it { should_not be_valid }
+  end
+
+  describe "with mois that is too long" do
+    before { @publication.mois = "a" * 11 }
+    it { should_not be_valid }
+  end
+
+  describe "with blank pages" do
+    before { @publication.pages = " " }
+    it { should_not be_valid }
+  end
+
+  describe "with pages that is too long" do
+    before { @publication.pages = "a" * 9 }
+    it { should_not be_valid }
+  end
+  
+  describe "with blank notes" do
+    before { @publication.notes = " " }
+    it { should_not be_valid }
+  end
+
+  describe "with notes that is too long" do
+    before { @publication.notes = "a" * 141 }
+    it { should_not be_valid }
+  end
+
+  describe "with blank resume" do
+    before { @publication.resume = " " }
+    it { should_not be_valid }
+  end
+
+  describe "with resume that is too long" do
+    before { @publication.resume = "a" * 141 }
+    it { should_not be_valid }
+  end
+
+  describe "having" do
+    let(:other_author) { FactoryGirl.create(:author) }    
+    before do
+      @publication.save
+      @publication.have!(other_author)
+    end
+
+    it { should be_having(other_author) }
+   its(:authors_publication) { should include(other_author) }
+    describe "and unhaving" do
+      before { @publication.unhave!(other_author) }
+
+      it { should_not be_having(other_author) }
+      its(:authors_publication) { should_not include(other_author) }
+    end
+  end
+end

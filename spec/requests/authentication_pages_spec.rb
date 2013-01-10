@@ -31,6 +31,7 @@ describe "Authentication" do
 		      it { should have_selector('title', text: user.name) }
 
 	  	      it { should have_link('Users',    href: users_path) }
+		       it { should have_link('Publications',    href: publications_path) }
 		      it { should have_link('Profile',  href: user_path(user)) }
 		      it { should have_link('Settings', href: edit_user_path(user)) }
 		      it { should have_link('Sign out', href: signout_path) }
@@ -48,6 +49,7 @@ describe "Authentication" do
 
 	    describe "for non-signed-in users" do
 	      let(:user) { FactoryGirl.create(:user) }
+              let(:author) { FactoryGirl.create(:author) }
 	      describe "when attempting to visit a protected page" do
 			before do
 			  visit edit_user_path(user)
@@ -70,7 +72,6 @@ describe "Authentication" do
 			  before { visit edit_user_path(user) }
 			  it { should have_selector('title', text: 'Sign in') }
 			end
-
 			describe "submitting to the update action" do
 			  before { put user_path(user) }
 			  specify { response.should redirect_to(signin_path) }
@@ -79,6 +80,7 @@ describe "Authentication" do
 			  before { visit users_path }
 			  it { should have_selector('title', text: 'Sign in') }
 			end
+                       
 	      end
 	    end
 	    describe "as wrong user" do
@@ -96,6 +98,14 @@ describe "Authentication" do
 			specify { response.should redirect_to(root_path) }
 		      end
           end
+          
+	  describe "in the Publications controller" do
+                describe "visiting the user publication_index" do
+			  before { visit publications_path }
+			  it { should have_selector('title', text: 'Sign in') }
+			end
+          end
+
 	  describe "in the Authors controller" do
 
 		describe "submitting to the create action" do
