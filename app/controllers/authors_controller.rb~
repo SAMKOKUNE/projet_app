@@ -14,5 +14,8 @@ class AuthorsController < ApplicationController
 
   def destroy
   end
+  def new
+    @publication = Publication.new
+  end
 end
 

@@ -1,0 +1,19 @@
+<% provide(:title, @publication.name) %>
+<div class="row">
+  <aside class="span4">
+    <section>
+      <h1>
+        <%= @publication.titre %>
+      </h1>
+    </section>
+  </aside>
+  <div class="span8">
+    <% if @publication.authors.any? %>
+      <h3>Authors (<%= @publication.authors.count %>)</h3>
+      <ol class="authors">
+        <%= render @authors %>
+      </ol>
+      <%= will_paginate @authors %>
+    <% end %>
+  </div>
+</div>

@@ -103,7 +103,12 @@ describe "Authentication" do
                 describe "visiting the user publication_index" do
 			  before { visit publications_path }
 			  it { should have_selector('title', text: 'Sign in') }
-			end
+	        end
+                  describe "visiting the user generate publication" do
+			  before { visit generate_path }
+			  it { should have_selector('title', text: 'Sign in') }
+	        end
+            
           end
 
 	  describe "in the Authors controller" do

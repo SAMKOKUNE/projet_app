@@ -14,5 +14,6 @@ class AuthorsController < ApplicationController
 
   def destroy
   end
+ 
 end
 

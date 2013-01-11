@@ -1,0 +1,36 @@
+<% provide(:title, 'Generate') %>
+<h1>Generate</h1>
+
+<div class="row">
+  <div class="span6 offset3">
+    <%= form_for(@publication) do |f| %>
+      <%= render 'shared/error_messages' %>
+      <%= f.label :titre %>
+      <%= f.text_field :titre %>
+
+      
+      <%= f.label :typePublication %>
+      <%= f.text_field :typePublication %>
+
+      <%= f.label :nom %>
+      <%= f.text_field :nom %>
+
+      <%= f.label :annee %>
+      <%= f.text_field :annee%>
+      
+      <%= f.label :mois %>
+      <%= f.text_field :mois%>
+
+      <%= f.label :pages %>
+      <%= f.text_field :pages%>
+      
+      <%= f.label :notes %>
+      <%= f.text_field :notes%>
+
+      <%= f.label :resume %>
+      <%= f.text_field :resume%>
+
+      <%= f.submit "Generate new publication", class: "btn btn-large btn-primary" %>
+    <% end %>
+  </div>
+</div>
