@@ -32,6 +32,7 @@ describe "Authentication" do
 
 	  	      it { should have_link('Users',    href: users_path) }
 		       it { should have_link('Publications',    href: publications_path) }
+                       it { should have_link('Generate new Publications',    href: generate_path) }
 		      it { should have_link('Profile',  href: user_path(user)) }
 		      it { should have_link('Settings', href: edit_user_path(user)) }
 		      it { should have_link('Sign out', href: signout_path) }
